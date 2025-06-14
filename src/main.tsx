@@ -1,5 +1,6 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
+import { BrowserRouter } from 'react-router-dom'
 import './index.css'
 
 const rootElement = document.getElementById("root");
@@ -9,8 +10,10 @@ const root = createRoot(rootElement);
 
 root.render(
   <StrictMode>
-    <div style={{ background: 'yellow', color: 'black', fontSize: '30px', padding: '20px' }}>
-      APP RENDERED
-    </div>
+    <BrowserRouter>
+      <div style={{ background: 'yellow', color: 'black', fontSize: '30px', padding: '20px' }}>
+        APP + ROUTER WORKS
+      </div>
+    </BrowserRouter>
   </StrictMode>
 );
