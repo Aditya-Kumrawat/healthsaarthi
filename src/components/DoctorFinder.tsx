@@ -96,6 +96,8 @@ const doctorsDatabase = [
   }
 ];
 
+const GOOGLE_MAPS_API_KEY = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
+
 const DoctorFinder: React.FC<DoctorFinderProps> = ({ language }) => {
   const [currentLocation, setCurrentLocation] = useState<{ lat: number; lng: number } | null>(null);
   const [loading, setLoading] = useState(true);
@@ -423,20 +425,21 @@ const DoctorFinder: React.FC<DoctorFinderProps> = ({ language }) => {
                     <p>{t.coordinates}:</p>
                     <p>Latitude: {currentLocation.lat.toFixed(6)}</p>
                     <p>Longitude: {currentLocation.lng.toFixed(6)}</p>
-        </div>
-      </div>
+                  </div>
+                </div>
               ) : (
                 <div className="h-[400px] rounded-xl overflow-hidden">
                   <iframe
+                    title="Doctor Locations"
                     width="100%"
                     height="100%"
                     frameBorder="0"
                     style={{ border: 0 }}
-                    src={`https://www.google.com/maps/embed/v1/search?key=AIzaSyB4E6GkCkmiScNMQSs5oukdpZ40FWx_0u8&q=doctor+${searchQuery}&center=${currentLocation.lat},${currentLocation.lng}&zoom=14`}
+                    src={`https://www.google.com/maps/embed/v1/search?key=${GOOGLE_MAPS_API_KEY}&q=doctor+${searchQuery}&center=${currentLocation.lat},${currentLocation.lng}&zoom=14`}
                     allowFullScreen
                     onError={handleMapError}
                   />
-            </div>
+                </div>
               )
             ) : null}
           </CardContent>
@@ -507,7 +510,7 @@ const DoctorFinder: React.FC<DoctorFinderProps> = ({ language }) => {
                     <div className="text-sm text-foreground/60">
                       {filters.maxDistance} {t.km}
                     </div>
-                </div>
+                  </div>
 
                   {/* Rating Filter */}
                   <div className="space-y-2">
@@ -583,15 +586,16 @@ const DoctorFinder: React.FC<DoctorFinderProps> = ({ language }) => {
                 <Card key={doctor.id} className="glass-card border-white/10 rounded-2xl shadow-lg-glass">
                   <CardContent className="p-6">
                     <div className="flex gap-4">
-                      {doctor.image && (
-                        <div className="w-24 h-24 rounded-full overflow-hidden">
-                          <img
-                            src={doctor.image}
-                            alt={doctor.name}
-                            className="w-full h-full object-cover"
-                          />
-                        </div>
-                      )}
+                      <div className="w-24 h-24 rounded-full overflow-hidden">
+                        <img
+                          src={doctor.image || '/images/default-doctor.png'}
+                          alt={`Dr. ${doctor.name}`}
+                          className="w-full h-full object-cover"
+                          onError={(e) => {
+                            e.currentTarget.src = '/images/default-doctor.png';
+                          }}
+                        />
+                      </div>
                       <div className="flex-1">
                         <div className="flex justify-between items-start mb-4">
                           <div>
@@ -605,8 +609,8 @@ const DoctorFinder: React.FC<DoctorFinderProps> = ({ language }) => {
                             <Star className="w-5 h-5 text-yellow-400 fill-current" />
                             <span className="ml-1 font-medium">{doctor.rating}</span>
                             <span className="ml-1 text-sm text-foreground/60">({doctor.reviews})</span>
-                  </div>
-                </div>
+                          </div>
+                        </div>
 
                         <div className="grid grid-cols-2 gap-4 mb-4">
                           <div className="flex items-center text-sm">
@@ -649,22 +653,22 @@ const DoctorFinder: React.FC<DoctorFinderProps> = ({ language }) => {
                               </Badge>
                             ))}
                           </div>
-                </div>
+                        </div>
 
                         <div className="flex justify-between items-center">
                           <Button variant="outline" className="glass-card border-white/20">
                             {t.viewProfile}
-                  </Button>
+                          </Button>
                           <Button className="bg-primary-600 hover:bg-primary-700">
                             {t.bookAppointment}
-                  </Button>
+                          </Button>
                         </div>
                       </div>
-                </div>
-              </CardContent>
-            </Card>
-          ))
-        )}
+                    </div>
+                  </CardContent>
+                </Card>
+              ))
+            )}
           </div>
         </div>
       </div>

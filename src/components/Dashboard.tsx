@@ -380,7 +380,7 @@ const Dashboard: React.FC<DashboardProps> = ({
                   )}
                 </Button>
                 <Avatar className="w-9 h-9 sm:w-10 sm:h-10 cursor-pointer ring-2 ring-muted-gold/20">
-                  <AvatarImage src="https://images.unsplash.com/photo-1494790108755-2616b612b786?w=40&h=40&fit=crop&crop=face" />
+                  <AvatarImage src="/images/default-avatar.png" alt="User avatar" />
                   <AvatarFallback>PS</AvatarFallback>
                 </Avatar>
               </div>

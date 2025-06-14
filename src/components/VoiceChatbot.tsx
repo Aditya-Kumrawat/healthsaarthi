@@ -180,25 +180,73 @@ const VoiceChatbot: React.FC<VoiceChatbotProps> = ({ language }) => {
   };
 
   const saveHealthChatData = async (data: any) => {
-    // Mock API call to save data
-    console.log('Saving health chat data:', data);
-    // In real implementation: fetch('/api/save-healthchat', { method: 'POST', body: JSON.stringify(data) })
+    try {
+      // In real implementation, use environment variable for API URL
+      const apiUrl = import.meta.env.VITE_API_URL || '/api/save-healthchat';
+      const response = await fetch(apiUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data)
+      });
+      
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      
+      const result = await response.json();
+      console.log('Health chat data saved:', result);
+    } catch (error) {
+      console.error('Failed to save health chat data:', error);
+      // Don't throw error to user, just log it
+    }
   };
 
   const speakText = (text: string) => {
-    if ('speechSynthesis' in window) {
+    if (!('speechSynthesis' in window)) {
+      toast({
+        title: "Not Supported",
+        description: "Speech synthesis is not supported in your browser.",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    try {
       const utterance = new SpeechSynthesisUtterance(text);
       utterance.lang = language === 'hindi' ? 'hi-IN' : 'en-US';
       utterance.onstart = () => setIsSpeaking(true);
       utterance.onend = () => setIsSpeaking(false);
+      utterance.onerror = (event) => {
+        console.error('Speech synthesis error:', event);
+        setIsSpeaking(false);
+        toast({
+          title: "Error",
+          description: "Failed to speak text. Please try again.",
+          variant: "destructive"
+        });
+      };
       speechSynthesis.speak(utterance);
+    } catch (error) {
+      console.error('Speech synthesis error:', error);
+      setIsSpeaking(false);
+      toast({
+        title: "Error",
+        description: "Failed to speak text. Please try again.",
+        variant: "destructive"
+      });
     }
   };
 
   const stopSpeaking = () => {
     if ('speechSynthesis' in window) {
-      speechSynthesis.cancel();
-      setIsSpeaking(false);
+      try {
+        speechSynthesis.cancel();
+        setIsSpeaking(false);
+      } catch (error) {
+        console.error('Error stopping speech:', error);
+      }
     }
   };
 

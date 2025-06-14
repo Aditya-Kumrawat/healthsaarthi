@@ -75,7 +75,7 @@ const DashboardSidebar: React.FC<DashboardSidebarProps> = ({
         <div className="glass-card p-4 mb-4 rounded-2xl shadow-lg-glass mx-4 mt-4">
           <div className="flex items-center space-x-3 mb-4">
             <Avatar className="w-12 h-12">
-              <AvatarImage src="https://images.unsplash.com/photo-1494790108755-2616b612b786?w=48&h=48&fit=crop&crop=face" />
+              <AvatarImage src="/images/default-avatar.png" alt="User avatar" />
               <AvatarFallback>PS</AvatarFallback>
             </Avatar>
             <div className="flex-1">

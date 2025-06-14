@@ -29,17 +29,36 @@ const DiseaseHeatmap: React.FC<DiseaseHeatmapProps> = ({ language }): JSX.Elemen
 
       // ✅ Fetch COVID-19 data
       try {
-        const res = await fetch('https://data.incovid19.org/v4/min/data.min.json');
-        const covidData = await res.json();
-
-        Object.entries(covidData).forEach(([stateCode, { total, meta }]: any) => {
-          if (meta?.latitude && meta?.longitude && total?.confirmed > 0) {
-            const intensity = Math.min(total.confirmed / 10000, 1);
-            heatData.push([meta.latitude, meta.longitude, intensity]);
+        const res = await fetch('https://data.incovid19.org/v4/min/data.min.json', {
+          headers: {
+            'Accept': 'application/json',
+            'Cache-Control': 'no-cache'
           }
         });
+        
+        if (!res.ok) {
+          throw new Error(`HTTP error! status: ${res.status}`);
+        }
+        
+        const covidData = await res.json();
+
+        if (covidData && typeof covidData === 'object') {
+          Object.entries(covidData).forEach(([stateCode, { total, meta }]: any) => {
+            if (meta?.latitude && meta?.longitude && total?.confirmed > 0) {
+              const intensity = Math.min(total.confirmed / 10000, 1);
+              heatData.push([meta.latitude, meta.longitude, intensity]);
+            }
+          });
+        }
       } catch (err) {
         console.error('COVID data fetch failed', err);
+        // Fallback to mock data if fetch fails
+        heatData = [
+          [28.7041, 77.1025, 0.5], // Delhi
+          [19.076, 72.8777, 0.8],  // Mumbai
+          [13.0827, 80.2707, 0.3], // Chennai
+          [23.0225, 72.5714, 0.6]  // Ahmedabad
+        ];
       }
 
       // ✅ Mock data for Dengue & Malaria
