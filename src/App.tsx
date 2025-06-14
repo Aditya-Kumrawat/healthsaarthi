@@ -17,6 +17,10 @@ const App = () => (
         <Sonner />
         <BrowserRouter>
           <div className="min-h-screen w-full bg-background font-poppins">
+            {/* Test element to confirm mounting */}
+            <div className="fixed top-0 left-0 z-50 p-2 bg-green-500 text-white">
+              App Mounted
+            </div>
             <Routes>
               <Route path="/" element={<Index />} />
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
