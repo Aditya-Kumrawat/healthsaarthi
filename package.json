@@ -6,9 +6,9 @@
   "scripts": {
     "dev": "vite",
     "prebuild": "node -e \"try { require('fs').chmodSync('node_modules/.bin/vite', '755') } catch(e) {}\"",
-    "build": "tsc && vite build",
+    "build": "tsc && npx vite build",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
-    "preview": "vite preview"
+    "preview": "npx vite preview"
   },
   "dependencies": {
     "@radix-ui/react-avatar": "^1.0.4",
